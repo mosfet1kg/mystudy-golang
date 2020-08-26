@@ -4,7 +4,7 @@ import (
     "log"
     "os"
 
-    _ "github.com/webgenie/go-in-action/chapter2/sample/matchers"
+    _ "github.com/webgenie/go-in-action/chapter2/sample/matchers" // init 실행
     "github.com/webgenie/go-in-action/chapter2/sample/search"
 )
 

@@ -32,5 +32,5 @@ func main() {
 	}
 
 	close(c) // for 반복문 안에서 range 키워드를 사용하면 채널이 닫힐 때까지 반복하면서 값을 꺼냅니다.
-	wg.Wait()
+	wg.Wait() // close하고 순서를 바꾸면 deadlock이 감지되어 종료됨
 }

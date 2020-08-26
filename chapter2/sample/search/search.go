@@ -29,26 +29,29 @@ func Run(searchTerm string) {
 	// 각기 다른 종류의 피드를 처리할 고루틴을 실행한다.
 	for _, feed := range feeds {
 		// 검색을 위해 검색기를 조회한다.
-		matcher, exists := matchers[feed.Type]
+		matcher, exists := matchers[feed.Type] // 아래 Register함수에서 등록함
 		if !exists {
 			matcher = matchers["default"]
 		}
 
 		// 검색을 실행하기 위해 고루틴을 실행힌다.
 		go func(matcher Matcher, feed *Feed) {
+			defer waitGroup.Done()
+
 			Match(matcher, feed, searchTerm, results)
-			waitGroup.Done()
 		}(matcher, feed)
 	}
 
 	// 모든 작업이 완료되었는지를 모니터링할 고루틴을 실행한다.
 	go func() {
+		defer close(results)
+
 		// 모든 작업이 처리될 때까지 기다린다.
 		waitGroup.Wait()
 
 		// Display 함수에게 프로그램을 종료할 수 있음을
 		// 알리기 위해 채널을 닫는다.
-		close(results)
+		//close(results)
 	}()
 
 	// 검색 결과를 화면에 표시하고
@@ -56,8 +59,9 @@ func Run(searchTerm string) {
 	Display(results)
 }
 
+// rss.go 에서 실행된다
 // 프로그램에서 사용할 검색기를 등록할 함수를 정의한다.
-func Register(feedType string, matcher Matcher) {
+func  Register(feedType string, matcher Matcher) {
 	if _, exists := matchers[feedType]; exists {
 		log.Fatalln(feedType, "검색기가 이미 등록되었습니다.")
 	}

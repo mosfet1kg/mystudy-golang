@@ -58,7 +58,7 @@ type (
 )
 
 // Matcher 인터페이스를 구현하는 rssMatcher 타입을 선언한다.
-type rssMatcher struct{}
+type rssMatcher struct{} // 아래 reflect로 Search있음
 
 // init 함수를 통해 프로그램에 검색기를 등록한다.
 func init() {
